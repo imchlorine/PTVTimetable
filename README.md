@@ -14,11 +14,11 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
       - For Medium Widget
   
-         Copy Everything in [timetable_medium.js](https://github.com/imchlorine/PTVTimetable/blob/main/ptv_timetable.js) and paste to your new Script.
+         Copy Everything in [timetable_medium.js](https://github.com/imchlorine/PTVTimetable/blob/main/timetable_medium.js) and paste to your new Script.
 
       - For Large Widget
 
-         Copy Everything in [timetable_large.js](https://github.com/imchlorine/PTVTimetable/blob/main/ptv_timetable.js) and paste to your new Script.
+         Copy Everything in [timetable_large.js](https://github.com/imchlorine/PTVTimetable/blob/main/timetable_large.js) and paste to your new Script.
 
       - What's the difference between `Medium` and `Large` Widget?
 
