@@ -266,11 +266,16 @@ async function searchStop(stopName) {
     let uri = `/search?term=${queryName}&mode=home&`
     let result = await apiRequest(uri)
     // Why PTV API return data type is not consistent??????????????
-    let stop = result["results"]["stop"]
-    if (Array.isArray(stop)) {
-        return result["results"]["stop"][0][0]
+    var stops = result["results"]["stop"]
+    if (Array.isArray(stops)) {
+        stops = result["results"]["stop"][0]
+    } else {
+        stops = result["results"]["stop"][routeType]
     }
-    return result["results"]["stop"][routeType][0]
+    let stop = stops.find(stop => stop.label === stopName)
+    if (stop === undefined)
+        stop = stops[0]
+    return stop
 }
 
 async function getStopServices(stopId, routeId) {
