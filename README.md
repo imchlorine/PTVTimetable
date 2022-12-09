@@ -22,7 +22,7 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
       - What's the difference between `Medium` and `Large` Widget?
 
-         Medium Widget is for someone who know exactly their route is, or they only wants to check one route at a time. Large Widget can show multiple routes between two stops.Generally, Large Widget need more time to response then Medium Widget as the code need more time to match all the routes avaliable.
+         Medium Widget is for someone who know exactly their route is, or they only wants to check one route at a time. Large Widget can show multiple routes between two stops. Generally, Large Widget needs more time to response as the code need more time to match all the routes avaliable.
 
 3. Run the code, you can see an example preview of the timetable: the top one is `Medium`, the bottom one is `Large` <br /> 
    ![example](https://github.com/imchlorine/PTVTimetable/blob/main/examples.jpg)
