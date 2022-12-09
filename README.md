@@ -25,7 +25,7 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
          Medium Widget is for someone who know exactly their route is, or they only wants to check one route at a time. Large Widget can show multiple routes between two stops.Generally, Large Widget need more time to response then Medium Widget as the code need more time to match all the routes avaliable.
 
 3. Run the code, you can see an example preview of the timetable: the top one is `Medium`, the bottom one is `Large` <br /> 
-   ![example](https://github.com/imchlorine/PTVTimetable/blob/main/example.jpg)
+   ![example](https://github.com/imchlorine/PTVTimetable/blob/main/examples.jpg)
 
 4. Change the value inside " "  for  `routeType`, `routeName`(routeName is not necessary for Large Widget), `fromStop`, `toStop` to customize your PTV timetable. Run the code again, you will see your timetable if all the values are valid and correct
 
