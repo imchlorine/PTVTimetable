@@ -12,7 +12,8 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
 2. Add new Script on Scriptable, copy Everything in [ptv_timetable.js](https://github.com/imchlorine/PTVTimetable/blob/main/ptv_timetable.js) and paste to your new Script. You can always duplicate and rename the Script to add multiple timetable for iOS Stack Widget
 
-3. Run the code, you can see an example of the timetable
+3. Run the code, you can see an example preview of the timetable: <br /> 
+   ![example](https://github.com/imchlorine/PTVTimetable/blob/main/example.jpg)
 
 4. Change the value inside " "  for  `routeType`  `routeName` `fromStop` `toStop`  to customize your PTV timetable. Run the code again, you will see your timetable if all the values are valid and correct
 
