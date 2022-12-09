@@ -29,7 +29,7 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
 4. Change the value inside " "  for  `routeType`, `routeName`(routeName is not necessary for Large Widget), `fromStop`, `toStop` to customize your PTV timetable. Run the code again, you will see your timetable if all the values are valid and correct
 
-5. Go to your Widgets library and find Scriptable, make sure pick the Middle/Large one and Add Widget to your home screen (Not suport layout for Small and Large Widget)
+5. Go to your Widgets library and find Scriptable, make sure pick the Middle/Large one and Add Widget to your home screen (Not suport layout for Small Widget)
 
 6. Long press the Widget and go Edit Widget. Choose the `Script` you Added, set `When Interacting` to `Run Script`, so you can manually update your timetable by tapping the widget, leave `Parameter` empty
 
