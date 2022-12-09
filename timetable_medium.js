@@ -1,6 +1,6 @@
 /**
  * PTV Timetable V1.0
- * Run on Scriptable
+ * Run on Scriptable For Medium Widegt
  * Created by Ricky Li on 2022/12/09
  * https://github.com/imchlorine/PTVTimetable.git
  * This Script is used for feching PTV timetable for specific route
