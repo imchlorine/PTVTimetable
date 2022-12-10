@@ -245,11 +245,20 @@ function getDepartures(direction) {
 async function getDirection() {
     let directions = Object.values(services["directions"])
     let direct0 = directions[0]
-    let stopSeq = await getStopSeq(routeType, route.id, direct0["direction_id"])
-    let stopDepIndex = stopSeq.findIndex(stop => stop.id === stopDep.id)
-    let stopDesIndex = stopSeq.findIndex(stop => stop.id === stopDes.id)
-    if (stopDepIndex < stopDesIndex) return direct0
-    return directions[1]
+    if (directions.length === 1) return direct0
+    var stopSeq = []
+    try {
+        stopSeq = await getStopSeq(routeType, route.id, direct0["direction_id"])
+    } catch (e) {
+        //console.error(e)
+    }
+    if (stopSeq.length > 0) {
+        let stopDepIndex = stopSeq.findIndex(stop => stop.id === stopDep.id)
+        let stopDesIndex = stopSeq.findIndex(stop => stop.id === stopDes.id)
+        if (stopDepIndex < stopDesIndex) return direct0
+        return directions[1]
+    }
+    return direct0
 }
 
 

@@ -274,10 +274,18 @@ async function getDirection() {
     let directionsInBetween = allDirections.filter(dir => routeIds.includes(dir["route_id"]))
     let directions = []
     for (let direct of directionsInBetween) {
-        let stopSeq = await getStopSeq(routeType, direct["route_id"], direct["direction_id"])
-        let stopDepIndex = stopSeq.findIndex(stop => stop.id === stopDep.id)
-        let stopDesIndex = stopSeq.findIndex(stop => stop.id === stopDes.id)
-        if (stopDepIndex < stopDesIndex) directions.push(direct)
+
+        let stopSeq = []
+        try {
+            stopSeq = await getStopSeq(routeType, direct["route_id"], direct["direction_id"])
+        } catch (e) {
+            console.error(e)
+        }
+        if (stopSeq.length > 0) {
+            let stopDepIndex = stopSeq.findIndex(stop => stop.id === stopDep.id)
+            let stopDesIndex = stopSeq.findIndex(stop => stop.id === stopDes.id)
+            if (stopDepIndex < stopDesIndex) directions.push(direct)
+        }
     }
     return directions
 }
