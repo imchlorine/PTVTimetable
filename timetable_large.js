@@ -45,6 +45,7 @@ let stopDes = await searchStop(toStop)
 let routes = await getRoute()
 let routeIds = routes.map(r => r.id)
 let services = await getStopServices()
+let disruptions = await getDisruptions()
 let directions = await getDirection()
 let departures = getDepartures(directions)
 let widget = await createWidget(departures);
@@ -73,6 +74,7 @@ function getRoutesInBetween() {
 async function createWidget(departures) {
     let typeColor = getRouteColor(routeType)
     let typeIcon = getRouteSymb(routeType)
+    let hasDisrupt = disruptions.length > 0
     let widget = new ListWidget()
     let startColor = new Color(getRouteColor(routeType))
     let thenColor = new Color("333434")
@@ -80,31 +82,30 @@ async function createWidget(departures) {
     let endColor = new Color("#ffffff")
     let gradient = new LinearGradient()
     gradient.colors = [startColor, thenColor, midColor, endColor]
-    gradient.locations = [0.0, 0.3, 0.4, 0.4]
+    gradient.locations = [0.0, 0.3, 0.41, 0.41]
     widget.backgroundGradient = gradient
-    widget.setPadding(20, 20, 20, 20)
+    widget.setPadding(15, 20, 15, 20)
 
     let titleWidget = widget.addStack()
     addSymbol({
         symbol: typeIcon,
         stack: titleWidget,
-        size: 30
+        size: 20
     })
     titleWidget.addSpacer()
     titleWidget.bottomAlignContent()
     addTextWithStyle({
         stack: titleWidget,
         text: "PT",
-        size: 25
+        size: 18
     })
     addTextWithStyle({
         stack: titleWidget,
         text: ">",
         color: "#C83C2D",
-        size: 35
+        size: 22
     })
-    widget.addSpacer()
-
+    widget.addSpacer(hasDisrupt ? 10 : 20)
     addTextWithStyle({
         stack: widget,
         text: fromStop,
@@ -113,10 +114,34 @@ async function createWidget(departures) {
     addTextWithStyle({
         stack: widget,
         text: "to " + toStop,
-        size: 22
+        size: 20
     })
+    widget.addSpacer(hasDisrupt ? 0 : 30)
+    if (hasDisrupt) {
+        addTextWithStyle({
+            stack: widget,
+            text: "Disruptions: " + disruptions[0].label,
+            size: 8,
+            lineLimit: 2
+        })
+        widget.addSpacer(2)
+        let link = widget.addStack()
+        link.centerAlignContent()
+        addTextWithStyle({
+            stack: link,
+            text: "MORE DISRUPTIONS ",
+            size: 8,
+            url: "googlechrome://www.ptv.vic.gov.au/disruptions/disruptions-information"
+        })
+        addSymbol({
+            symbol: "arrow.up.right.square",
+            stack: link,
+            size: 10
+        })
+    }
+
     widget.addSpacer()
-    widget.addSpacer(30)
+    widget.addSpacer(10)
     for (const dep of departures) {
         let lineWidget = widget.addStack()
         addTextWithStyle({
@@ -145,7 +170,7 @@ async function createWidget(departures) {
             color: "#808080",
             size: 14
         })
-        widget.addSpacer(5)
+        widget.addSpacer(2)
         let depWidget = widget.addStack();
         var scheduledTime = dep["scheduled_departure_utc"]
         var estimatedTime = dep["estimated_departure_utc"]
@@ -161,7 +186,7 @@ async function createWidget(departures) {
             df.useMediumDateStyle()
             minText = df.string(localTime).slice(0, -4)
         }
-        if (time < 60) minText = time + min
+        if (time < 120) minText = time + min
         if (time === 0) minText = "Now"
         let depText = "Scheduled " + ("0" + localTime.getHours()).slice(-2) + ":" + ("0" + localTime.getMinutes()).slice(-2)
         addTextWithStyle({
@@ -326,6 +351,12 @@ async function getStopSeq(routeType, routeId, directionId) {
 function getDirectionIdFromDes(depId, desId, depSeq, desSeq) {
     if (depSeq["seqs"][depId] < desSeq["seqs"][desId]) return depSeq["directions"]
     return desSeq["directions"]
+}
+
+async function getDisruptions() {
+    let uri = `/disruptions?`
+    let result = await apiRequest(uri)
+    return result["disruptions"].filter(d => d["route_ids"].includes(routeIds[0]) && d["kind"] === "Planned Works")
 }
 
 async function getToken() {

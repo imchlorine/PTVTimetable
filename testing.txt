@@ -1,0 +1,16 @@
+// 0
+const routeType = "0"
+const fromStop = "Flinders Street Station"
+const toStop = "Box Hill Station"
+
+// 1
+const routeType = "1"
+const fromStop = "Melbourne University/Swanston St #1"
+const toStop = "Federation Square/Swanston St #13"
+
+// 2
+const routeType = "2"
+const fromStop = "Pettys Reserve/Reynolds Rd"
+const toStop = "The Pines SC/Reynolds Rd"
+
+
