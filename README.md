@@ -41,7 +41,7 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
     - Tram: Route number is ok, eg. `1`, `3-3a`, `96` etc. If not, try full name eg.`1 East Coburg South Melbourne Beach`
   
-    - Bus:  Route number is ok, eg. `200`, `207`, `900` etc. If not, try full name eg.`200 East Coburg - South Melbourne Beach` 
+    - Bus:  Route number is ok, eg. `200`, `207`, `900` etc. If not, try full name eg.`200 City - Bulleen` 
 
     - V/Line: Must use route full name, eg. `Ballarat-Wendouree - Melbourne via Melton`
   
