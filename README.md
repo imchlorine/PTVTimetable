@@ -26,7 +26,10 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
          Medium Widget is for someone who know exactly their route is, or they only wants to check one route at a time. Large Widget can show multiple routes between two stops. Generally, Large Widget needs more time to response as the code need more time to match all the routes avaliable.
 
 3. Run the code, you can see an example preview of the timetable: the top one is `Medium`, the bottom one is `Large` <br /> 
-   ![example](https://github.com/imchlorine/PTVTimetable/blob/main/examples.jpg)
+   <p align="center" width="100%">
+    <img width="33%" src="https://github.com/imchlorine/PTVTimetable/blob/main/examples.jpg">
+   </p>
+
 
 4. Change the value inside " " to customize your PTV timetable.
    
@@ -51,7 +54,7 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
   
     - Bus: eg. `Caulfield Railway Station/Sir John Monash Dr`
 
-    - V/Line: eg.  `Flinders Street Railway Station` Must contain "Railway" if your route type is `0` for train.
+    - V/Line: eg.  `Flinders Street Railway Station` Must contain "Railway" if your route type is `3` for V/Line.
 
     - Go PTV App or website to find stop name. Make sure use the full name of the stop to get the most accurate result.
    
@@ -59,7 +62,7 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
 5. Run the code again, you will see your timetable if all the values are valid and correct. (If something wrong, please report an issue with all the values you changed, and I will look into it for you)
    
-6. Go to your Widgets library and find Scriptable, make sure pick the Middle/Large one and Add Widget to your home screen (Not suport layout for Small Widget)
+6. Go to your Widgets library and find Scriptable, make sure pick the Middle/Large one and Add Widget to your home screen (Not support layout for Small Widget)
 
 7. Long press the Widget and go Edit Widget. Choose the `Script` you Added, set `When Interacting` to `Run Script`, so you can manually update your timetable by tapping the widget, leave `Parameter` empty
 
@@ -68,10 +71,6 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
 ## Here are some more examples preview:
 
-| ![image1](https://github.com/imchlorine/PTVTimetable/blob/main/example/example1.jpg) | ![image2](https://github.com/imchlorine/PTVTimetable/blob/main/example/example2.jpg) |
-|:---:|:---:|
-| ![image3](https://github.com/imchlorine/PTVTimetable/blob/main/example/example3.jpg) | ![image4](https://github.com/imchlorine/PTVTimetable/blob/main/example/example4.jpg) |
-|:---:|:---:|
-| ![image5](https://github.com/imchlorine/PTVTimetable/blob/main/example/example5.jpg) | ![image6](https://github.com/imchlorine/PTVTimetable/blob/main/example/example6.jpg) |
-|:---:|:---:|
-| ![image6](https://github.com/imchlorine/PTVTimetable/blob/main/example/example6.jpg) | ![image8](https://github.com/imchlorine/PTVTimetable/blob/main/example/example8.jpg) |
+| ![image1](https://github.com/imchlorine/PTVTimetable/blob/main/example/example1.jpg) | ![image2](https://github.com/imchlorine/PTVTimetable/blob/main/example/example2.jpg) | ![image3](https://github.com/imchlorine/PTVTimetable/blob/main/example/example3.jpg) | ![image4](https://github.com/imchlorine/PTVTimetable/blob/main/example/example4.jpg) |
+|:---:|:---:|:---:|:---:|
+|![image5](https://github.com/imchlorine/PTVTimetable/blob/main/example/example5.jpg) | ![image6](https://github.com/imchlorine/PTVTimetable/blob/main/example/example6.jpg) | ![image7](https://github.com/imchlorine/PTVTimetable/blob/main/example/example7.jpg) | ![image8](https://github.com/imchlorine/PTVTimetable/blob/main/example/example8.jpg) |
