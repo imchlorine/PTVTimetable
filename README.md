@@ -6,6 +6,7 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 **Important! This Widget is not affiliated to PTV or Myki. For personal use only.**
 
 
+
 ## How to add PTVTimetable Widget to my iOS?
 
 1. Download [Scriptable](https://apps.apple.com/us/app/scriptable/id1405459188?ign-mpt=uo%3D4) from App Store
@@ -27,11 +28,51 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 3. Run the code, you can see an example preview of the timetable: the top one is `Medium`, the bottom one is `Large` <br /> 
    ![example](https://github.com/imchlorine/PTVTimetable/blob/main/examples.jpg)
 
-4. Change the value inside " "  for  `routeType`, `routeName`(routeName is not necessary for Large Widget), `fromStop`, `toStop` to customize your PTV timetable. Run the code again, you will see your timetable if all the values are valid and correct
+4. Change the value inside " " to customize your PTV timetable.
+   
+   `routeType`: Train `0` ,Tram `1`, Bus `2`, V/Line `3`, Night Bus `4` 
 
-5. Go to your Widgets library and find Scriptable, make sure pick the Middle/Large one and Add Widget to your home screen (Not suport layout for Small Widget)
+   `routeName`:(Not necessary for Large Widget)
 
-6. Long press the Widget and go Edit Widget. Choose the `Script` you Added, set `When Interacting` to `Run Script`, so you can manually update your timetable by tapping the widget, leave `Parameter` empty
+    - Train: eg. `Alamein` or `Alamein Line`, `Belgrave` or `Belgrave Line`
 
-7. Now you may see the Magic, Enjoy! If something wrong, please report an issue with all the values you changed, and I will look into it for you.
+    - Tram: Route number is ok, eg. `1`, `3-3a`, `96` etc. If not, try full name eg.`1 East Coburg South Melbourne Beach`
+  
+    - Bus:  Route number is ok, eg. `200`, `207`, `900` etc. If not, try full name eg.`200 East Coburg - South Melbourne Beach` 
 
+    - V/Line: Must use route full name, eg. `Ballarat-Wendouree - Melbourne via Melton`
+  
+    - To search the route full name, please visit https://www.ptv.vic.gov.au/routes
+
+   `fromStop`: Your Departure Stop Name. 
+    - Train: eg. `Flinders Street Station`. Do not contain "Railway" if your route type is `0` for train.
+  
+    - Tram: eg. `Federation Square/Swanston St #13`
+  
+    - Bus: eg. `Caulfield Railway Station/Sir John Monash Dr`
+
+    - V/Line: eg.  `Flinders Street Railway Station` Must contain "Railway" if your route type is `0` for train.
+
+    - Go PTV App or website to find stop name. Make sure use the full name of the stop to get the most accurate result.
+   
+   `toStop`: Your Arriving Stop Name.
+
+5. Run the code again, you will see your timetable if all the values are valid and correct. (If something wrong, please report an issue with all the values you changed, and I will look into it for you)
+   
+6. Go to your Widgets library and find Scriptable, make sure pick the Middle/Large one and Add Widget to your home screen (Not suport layout for Small Widget)
+
+7. Long press the Widget and go Edit Widget. Choose the `Script` you Added, set `When Interacting` to `Run Script`, so you can manually update your timetable by tapping the widget, leave `Parameter` empty
+
+8. Now you may see the Magic, Enjoy! 
+
+
+## Here are some more examples preview:
+
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example1.jpg" width="425"/>
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example2.jpg" width="425"/> 
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example3.jpg" width="425"/> 
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example4.jpg" width="425"/> 
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example5.jpg" width="425"/> 
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example6.jpg" width="425"/> 
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example7.jpg" width="425"/> 
+<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example8.jpg" width="425"/> 

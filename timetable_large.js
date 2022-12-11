@@ -1,9 +1,12 @@
 /**
- * PTV Timetable V1.0
+ * PTV Timetable V2.0
  * Run on Scriptable For Large Widget
  * Created by Ricky Li on 2022/12/09
+ * 
+ * For instructions visit:
  * https://github.com/imchlorine/PTVTimetable.git
- * This Script is used for feching PTV timetable for specific route
+ * 
+ * This Script is used for feching PTV timetable for routes between two stops
  * You can always duplicate this Script to add multiple timetable for iOS Stack Widget
  * 
  * For fetching Myki Balance Widget visit:
@@ -23,10 +26,11 @@
 
 // [fromStop] Your Departure Stop Name
 // [toStop] Your Arriving Stop Name
-// Go PTV App or website to find stop name.
+// Go PTV App or website to find stop name
+// Make sure use the full name of the stop to get the most accurate result.
 
-// Here is an example for Tram Route 1 from "Melbourne University/Swanston St #1" to "Federation Square/Swanston St #13"
-// Please change the value inside " " below to customize your PTV timetable. 
+// Here is an example for Tram from "Melbourne University/Swanston St #1" to "Federation Square/Swanston St #13"
+// Please change the content inside " " below to customize your PTV timetable. 
 
 const routeType = "1"
 const fromStop = "Melbourne University/Swanston St #1"
@@ -44,10 +48,10 @@ let stopDep = await searchStop(fromStop)
 let stopDes = await searchStop(toStop)
 let routes = await getRoute()
 let routeIds = routes.map(r => r.id)
-let services = await getStopServices()
+let allDepartures = await getStopServices()
 let disruptions = await getDisruptions()
-let directions = await getDirection()
-let departures = getDepartures(directions)
+let directionIds = await getDirection()
+let departures = getDepartures()
 let widget = await createWidget(departures);
 if (!config.runsInWidget) {
     await widget.presentLarge()
@@ -56,19 +60,6 @@ Script.setWidget(widget)
 Script.complete()
 
 
-function getRoutesInBetween() {
-    var depRoutes
-    var desRoutes
-    if (routeType === "0" || routeType === "3") {
-        depRoutes = stopDep.lineNames
-        desRoutes = stopDes.lineNames
-    } else {
-        depRoutes = stopDep.routeNumbers
-        desRoutes = stopDes.routeNumbers
-    }
-    let routes = desRoutes.filter(element => depRoutes.includes(element))
-    return routes
-}
 
 
 async function createWidget(departures) {
@@ -76,145 +67,144 @@ async function createWidget(departures) {
     let typeIcon = getRouteSymb(routeType)
     let hasDisrupt = disruptions.length > 0
     let widget = new ListWidget()
-    let startColor = new Color(getRouteColor(routeType))
+    let startColor = new Color(typeColor)
     let thenColor = new Color("333434")
     let midColor = new Color("333434")
     let endColor = new Color("#ffffff")
     let gradient = new LinearGradient()
     gradient.colors = [startColor, thenColor, midColor, endColor]
-    gradient.locations = [0.0, 0.3, 0.41, 0.41]
+    gradient.locations = [0.0, 0.3, 0.51, 0.51]
     widget.backgroundGradient = gradient
-    widget.setPadding(15, 20, 15, 20)
+    widget.addSpacer()
 
     let titleWidget = widget.addStack()
+    titleWidget.centerAlignContent()
     addSymbol({
         symbol: typeIcon,
         stack: titleWidget,
-        size: 20
+        size: 14
     })
+    titleWidget.addSpacer(10)
+
+    let df = new DateFormatter()
+    df.useShortTimeStyle()
+    let updated = df.string(new Date())
+    addTextWithStyle({
+        stack: titleWidget,
+        text: "Updated at " + updated,
+        size: 10
+    })
+
     titleWidget.addSpacer()
-    titleWidget.bottomAlignContent()
-    addTextWithStyle({
-        stack: titleWidget,
-        text: "PT",
-        size: 18
-    })
-    addTextWithStyle({
-        stack: titleWidget,
-        text: ">",
-        color: "#C83C2D",
-        size: 22
-    })
-    widget.addSpacer(hasDisrupt ? 10 : 20)
-    addTextWithStyle({
-        stack: widget,
-        text: fromStop,
-        size: 25
-    })
-    addTextWithStyle({
-        stack: widget,
-        text: "to " + toStop,
-        size: 20
-    })
-    widget.addSpacer(hasDisrupt ? 0 : 30)
+
     if (hasDisrupt) {
         addTextWithStyle({
-            stack: widget,
-            text: "Disruptions: " + disruptions[0].label,
-            size: 8,
-            lineLimit: 2
-        })
-        widget.addSpacer(2)
-        let link = widget.addStack()
-        link.centerAlignContent()
-        addTextWithStyle({
-            stack: link,
-            text: "MORE DISRUPTIONS ",
-            size: 8,
-            url: "googlechrome://www.ptv.vic.gov.au/disruptions/disruptions-information"
+            stack: titleWidget,
+            text: "Disruptions",
+            size: 10,
+            color: "#F9D748",
+            url: "googlechrome://www.ptv.vic.gov.au" + disruptions[0].link
         })
         addSymbol({
             symbol: "arrow.up.right.square",
-            stack: link,
-            size: 10
+            stack: titleWidget,
+            size: 10,
+            color: "#F9D748"
         })
     }
 
-    widget.addSpacer()
-    widget.addSpacer(10)
-    for (const dep of departures) {
-        let lineWidget = widget.addStack()
-        addTextWithStyle({
-            stack: lineWidget,
-            text: "Route " + dep.route.label,
-            color: "#808080",
-            size: 14
-        })
-        lineWidget.addSpacer(10)
-        lineWidget.centerAlignContent()
-        let isExpress = dep.run["express_stop_count"]
+    widget.addSpacer(5)
+    addTextWithStyle({
+        stack: widget,
+        text: fromStop,
+        size: 18
+    })
 
-        addTextWithStyle({
-            stack: lineWidget,
-            text: isExpress > 0 ? "EXPRESS" : "",
-            color: "#88BC41",
-            size: 10
-        })
+    widget.addSpacer(2)
+
+    addTextWithStyle({
+        stack: widget,
+        text: "to " + toStop,
+        size: 16
+    })
+
+    widget.addSpacer(15)
+
+    addTextWithStyle({
+        stack: widget,
+        text: "Route " + route.label,
+        color: typeColor,
+        size: 12
+    })
+    widget.addSpacer(5)
+
+    let routeWidget = widget.addStack();
+    routeWidget.addSpacer(10);
+
+    for (const dep of departures) {
+        let depWidget = widget.addStack();
         var platText = dep["platform_number"]
         if (platText != null) platText = "Platform " + platText;
-        if (platText != undefined)
-            lineWidget.addSpacer()
+
         addTextWithStyle({
-            stack: lineWidget,
+            stack: depWidget,
             text: platText ?? "",
-            color: "#808080",
-            size: 14
+            color: "#000000"
         })
-        widget.addSpacer(2)
-        let depWidget = widget.addStack();
+        if (platText != null) depWidget.addSpacer(20)
+
         var scheduledTime = dep["scheduled_departure_utc"]
         var estimatedTime = dep["estimated_departure_utc"]
-        var minText = "";
-        let dif = new Date(estimatedTime ?? scheduledTime).getTime() - new Date().getTime();
-        let time = Math.round(dif / 60000)
-        let min = time == 1 ? " min" : " mins"
-        minText = time + min
         let dateText = new Date(scheduledTime)
         let localTime = new Date(dateText)
-        if (new Date().toDateString() != localTime.toDateString()) {
-            let df = new DateFormatter()
-            df.useMediumDateStyle()
-            minText = df.string(localTime).slice(0, -4)
-        }
-        if (time < 120) minText = time + min
-        if (time === 0) minText = "Now"
         let depText = "Scheduled " + ("0" + localTime.getHours()).slice(-2) + ":" + ("0" + localTime.getMinutes()).slice(-2)
         addTextWithStyle({
             stack: depWidget,
             text: depText,
             color: "#000000"
         })
+        depWidget.addSpacer(15)
+
+        let isExpress = dep.run["express_stop_count"]
+        addTextWithStyle({
+            stack: depWidget,
+            text: isExpress > 0 ? "EXPRESS" : "",
+            color: "#88BC41",
+        })
+
         depWidget.addSpacer()
+
+        var minText = "";
+        let dif = new Date(estimatedTime ?? scheduledTime).getTime() - new Date().getTime();
+        let time = Math.round(dif / 60000)
+        let min = time == 1 ? " min" : " mins"
+        minText = time + min
+        if (time < 50) minText = time + min
+        if (time === 0) minText = "Now"
+        if (estimatedTime === null) minText = ""
+        if (new Date().toDateString() != localTime.toDateString()) {
+            let df = new DateFormatter()
+            df.useMediumDateStyle()
+            minText = df.string(localTime).slice(0, -4)
+        }
 
         addTextWithStyle({
             stack: depWidget,
             text: minText,
-            color: "#88BC41",
+            color: "#88BC41"
         })
-        widget.addSpacer()
+
+        if (estimatedTime != null)
+            addSymbol({
+                symbol: "dot.radiowaves.up.forward",
+                stack: depWidget,
+                size: 8,
+                color: "#88BC41"
+            })
+
+        widget.addSpacer(5)
     }
-    let df = new DateFormatter()
-    df.useShortTimeStyle()
-    let updated = df.string(new Date())
 
-    addTextWithStyle({
-        stack: widget,
-        text: "Last updated at " + updated,
-        size: 12,
-        color: "#000000"
-    })
-
-    widget.addSpacer()
     return widget
 }
 
@@ -280,48 +270,79 @@ function addTextWithStyle({
     stack,
     text,
     size = 20,
-    color = "#ffffff"
+    color = "#ffffff",
+    url = undefined,
+    lineLimit = 1
 }) {
     const textwidget = stack.addText(text)
     textwidget.textColor = new Color(color)
     textwidget.font = new Font("AppleSDGothicNeo-Bold", size)
+    textwidget.lineLimit = lineLimit
+    if (url != undefined) textwidget.url = url
     return textwidget
 }
 
-function getDepartures(directions) {
-    let directionIds = directions.map(d => d["direction_id"])
-    let departures = services["departures"].filter(departure => directionIds.includes(departure["direction_id"]))
+function getDepartures() {
+    let departures = allDepartures.filter(d => directionIds.includes(d["direction_id"].toString()))
     return departures.slice(0, 3)
 }
 
 async function getDirection() {
-    let allDirections = Object.values(services["directions"])
-    let directionsInBetween = allDirections.filter(dir => routeIds.includes(dir["route_id"]))
-    let directions = []
-    for (let direct of directionsInBetween) {
-
-        let stopSeq = []
-        try {
-            stopSeq = await getStopSeq(routeType, direct["route_id"], direct["direction_id"])
-        } catch (e) {
-            console.error(e)
-        }
-        if (stopSeq.length > 0) {
-            let stopDepIndex = stopSeq.findIndex(stop => stop.id === stopDep.id)
-            let stopDesIndex = stopSeq.findIndex(stop => stop.id === stopDes.id)
-            if (stopDepIndex < stopDesIndex) directions.push(direct)
+    let directionIds = []
+    let groupRoutes = Object.values(groupBy(allDepartures, (d) => d.route.id))
+    for (let groupRoute of groupRoutes) {
+        let groupDirections = groupBy(groupRoute, (d) => d["direction_id"])
+        let keys = Object.keys(groupDirections)
+        let numOfDirect = keys.length
+        if (numOfDirect === 1) {
+            directionIds.push(keys[0])
+        } else {
+            var stopSeq = []
+            try {
+                stopSeq = await getStopSeq(routeType, groupDirections[keys[0]][0].route.id, keys[0])
+            } catch (e) {
+                console.error(e)
+            }
+            if (stopSeq.length > 0) {
+                let stopDepIndex = stopSeq.findIndex(stop => stop.id === stopDep.id)
+                let stopDesIndex = stopSeq.findIndex(stop => stop.id === stopDes.id)
+                directionIds.push(stopDepIndex < stopDesIndex ? keys[0] : keys[1])
+            }
         }
     }
-    return directions
+    return directionIds
+}
+
+function groupBy(xs, f) {
+    return xs.reduce((r, v, i, a, k = f(v)) => ((r[k] || (r[k] = [])).push(v), r), {});
 }
 
 async function getRoute() {
     let uri = `/routes?route_type=${routeType}&`
     let result = await apiRequest(uri)
     let routesInBetween = getRoutesInBetween()
-    let routes = result["routes"].filter((r) => routesInBetween.includes(r["short_label"]));
+    let routes = result["routes"].filter((r) => routesInBetween.includes(r["short_label"]) || routesInBetween.includes(r["label"]));
     return routes
 }
+
+function getRoutesInBetween() {
+    var depRoutes
+    var desRoutes
+    if (routeType === "0" || routeType === "3") {
+        depRoutes = stopDep.lineNames
+        desRoutes = stopDes.lineNames
+    } else {
+        depRoutes = stopDep.routeNumbers.map((function (num, idx) {
+            return num + " " + stopDep.lineNames[idx];
+        }))
+        desRoutes = stopDes.routeNumbers.map((function (num, idx) {
+            return num + " " + stopDes.lineNames[idx];
+        }))
+    }
+    let routes = desRoutes.filter(element => depRoutes.includes(element))
+    return routes
+}
+
 
 async function searchStop(stopName) {
     let queryName = encodeURIComponent(stopName)
@@ -336,9 +357,9 @@ async function searchStop(stopName) {
 }
 
 async function getStopServices() {
-    let uri = `/stop-services?stop_id=${stopDep.id}&mode_id=${routeType}&max_results=4&look_backwards=false&`
+    let uri = `/stop-services?stop_id=${stopDep.id}&mode_id=${routeType}&max_results=3&look_backwards=false&`
     let result = await apiRequest(uri)
-    return result
+    return result["departures"].filter(dep => routeIds.includes(dep.route.id))
 }
 
 async function getStopSeq(routeType, routeId, directionId) {
@@ -356,7 +377,7 @@ function getDirectionIdFromDes(depId, desId, depSeq, desSeq) {
 async function getDisruptions() {
     let uri = `/disruptions?`
     let result = await apiRequest(uri)
-    return result["disruptions"].filter(d => d["route_ids"].includes(routeIds[0]) && d["kind"] === "Planned Works")
+    return result["disruptions"].filter(d => d["route_ids"].filter(r => routeIds.includes(r)).length > 0 && d["kind"] === "Planned Works")
 }
 
 async function getToken() {

@@ -1,16 +1,34 @@
 // 0
+const routeName = "Lilydale"
 const routeType = "0"
 const fromStop = "Flinders Street Station"
 const toStop = "Box Hill Station"
 
 // 1
+const routeName = "1"
 const routeType = "1"
 const fromStop = "Melbourne University/Swanston St #1"
 const toStop = "Federation Square/Swanston St #13"
 
 // 2
+const routeName = "901"
 const routeType = "2"
 const fromStop = "Pettys Reserve/Reynolds Rd"
 const toStop = "The Pines SC/Reynolds Rd"
+
+const routeName = "900"
+const routeType = "2"
+const fromStop = "Monash University"
+const toStop = "Caulfield Railway Station/Sir John Monash Dr"
+
+const routeType = "2"
+const fromStop = "Bailey St - South/Princes Hwy"
+const toStop = "Day St/Ross St"
+
+// 3
+const routeName = "Ballarat-Wendouree - Melbourne via Melton"
+const routeType = "3"
+const fromStop = "Southern Cross Railway Station"
+const toStop = "Ballarat Railway Station"
 
 
