@@ -68,11 +68,10 @@ Fetch PTV Timetable with Scriptable, add to iOS Widget.
 
 ## Here are some more examples preview:
 
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example1.jpg" width="300"/>
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example2.jpg" width="300"/> 
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example3.jpg" width="300"/> 
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example4.jpg" width="300"/> 
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example5.jpg" width="300"/> 
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example6.jpg" width="300"/> 
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example7.jpg" width="300"/> 
-<img src="https://github.com/imchlorine/PTVTimetable/blob/main/example/example8.jpg" width="300"/> 
+| ![image1](https://github.com/imchlorine/PTVTimetable/blob/main/example/example1.jpg) | ![image2](https://github.com/imchlorine/PTVTimetable/blob/main/example/example2.jpg) |
+|:---:|:---:|
+| ![image3](https://github.com/imchlorine/PTVTimetable/blob/main/example/example3.jpg) | ![image4](https://github.com/imchlorine/PTVTimetable/blob/main/example/example4.jpg) |
+|:---:|:---:|
+| ![image5](https://github.com/imchlorine/PTVTimetable/blob/main/example/example5.jpg) | ![image6](https://github.com/imchlorine/PTVTimetable/blob/main/example/example6.jpg) |
+|:---:|:---:|
+| ![image6](https://github.com/imchlorine/PTVTimetable/blob/main/example/example6.jpg) | ![image8](https://github.com/imchlorine/PTVTimetable/blob/main/example/example8.jpg) |
