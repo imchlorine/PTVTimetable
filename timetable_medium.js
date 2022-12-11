@@ -180,8 +180,7 @@ async function createWidget(departures) {
         let dif = new Date(estimatedTime ?? scheduledTime).getTime() - new Date().getTime();
         let time = Math.round(dif / 60000)
         let min = time == 1 ? " min" : " mins"
-        minText = time + min
-        if (time < 50) minText = time + min
+        if (time < 120) minText = time + min
         if (time === 0) minText = "Now"
         if (estimatedTime === null) minText = ""
         if (new Date().toDateString() != localTime.toDateString()) {
@@ -193,6 +192,13 @@ async function createWidget(departures) {
         addTextWithStyle({
             stack: depWidget,
             text: minText,
+            color: "#88BC41"
+        })
+        if (estimatedTime != null && time < 120)
+        addSymbol({
+            symbol: "dot.radiowaves.up.forward",
+            stack: depWidget,
+            size: 12,
             color: "#88BC41"
         })
 

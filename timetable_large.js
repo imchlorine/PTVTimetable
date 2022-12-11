@@ -73,85 +73,123 @@ async function createWidget(departures) {
     let endColor = new Color("#ffffff")
     let gradient = new LinearGradient()
     gradient.colors = [startColor, thenColor, midColor, endColor]
-    gradient.locations = [0.0, 0.3, 0.51, 0.51]
+    gradient.locations = [0.0, 0.3, 0.45, 0.45]
     widget.backgroundGradient = gradient
-    widget.addSpacer()
+    widget.setPadding(15, 20, 15, 20)
 
     let titleWidget = widget.addStack()
-    titleWidget.centerAlignContent()
+    titleWidget.bottomAlignContent()
+
     addSymbol({
         symbol: typeIcon,
         stack: titleWidget,
-        size: 14
+        size: 20
     })
-    titleWidget.addSpacer(10)
 
     let df = new DateFormatter()
     df.useShortTimeStyle()
     let updated = df.string(new Date())
     addTextWithStyle({
         stack: titleWidget,
-        text: "Updated at " + updated,
-        size: 10
+        text: " Last updated at " + updated,
+        size: 12
     })
 
     titleWidget.addSpacer()
 
-    if (hasDisrupt) {
-        addTextWithStyle({
-            stack: titleWidget,
-            text: "Disruptions",
-            size: 10,
-            color: "#F9D748",
-            url: "googlechrome://www.ptv.vic.gov.au" + disruptions[0].link
-        })
-        addSymbol({
-            symbol: "arrow.up.right.square",
-            stack: titleWidget,
-            size: 10,
-            color: "#F9D748"
-        })
-    }
-
-    widget.addSpacer(5)
     addTextWithStyle({
-        stack: widget,
-        text: fromStop,
+        stack: titleWidget,
+        text: "PT",
         size: 18
     })
 
-    widget.addSpacer(2)
+    addTextWithStyle({
+        stack: titleWidget,
+        text: ">",
+        color: "#C83C2D",
+        size: 22
+    })
+
+    widget.addSpacer(hasDisrupt ? 10 : 30)
+
+    addTextWithStyle({
+        stack: widget,
+        text: fromStop,
+        size: 25
+    })
 
     addTextWithStyle({
         stack: widget,
         text: "to " + toStop,
-        size: 16
+        size: 20
     })
 
-    widget.addSpacer(15)
+    widget.addSpacer(hasDisrupt ? 5 : 35)
 
-    addTextWithStyle({
-        stack: widget,
-        text: "Route " + route.label,
-        color: typeColor,
-        size: 12
-    })
-    widget.addSpacer(5)
+    if (hasDisrupt) {
+        addTextWithStyle({
+            stack: widget,
+            text: "Disruptions: " + disruptions[0].label,
+            size: 9,
+            lineLimit: 2
+        })
 
-    let routeWidget = widget.addStack();
-    routeWidget.addSpacer(10);
+        widget.addSpacer(2)
 
-    for (const dep of departures) {
-        let depWidget = widget.addStack();
-        var platText = dep["platform_number"]
-        if (platText != null) platText = "Platform " + platText;
+        let link = widget.addStack()
+        link.centerAlignContent()
 
         addTextWithStyle({
-            stack: depWidget,
-            text: platText ?? "",
-            color: "#000000"
+            stack: link,
+            text: "READ MORE ",
+            size: 8,
+            url: "googlechrome://www.ptv.vic.gov.au" + disruptions[0].link
         })
-        if (platText != null) depWidget.addSpacer(20)
+
+        addSymbol({
+            symbol: "arrow.up.right.square",
+            stack: link,
+            size: 10
+        })
+    }
+
+    widget.addSpacer()
+    widget.addSpacer(20)
+
+    for (const dep of departures) {
+        let lineWidget = widget.addStack()
+
+        addTextWithStyle({
+            stack: lineWidget,
+            text: "Route " + dep.route.label,
+            color: "#808080",
+            size: 14
+        })
+
+        lineWidget.addSpacer(10)
+        lineWidget.centerAlignContent()
+
+        let isExpress = dep.run["express_stop_count"]
+        addTextWithStyle({
+            stack: lineWidget,
+            text: isExpress > 0 ? "EXPRESS" : "",
+            color: "#88BC41",
+            size: 10
+        })
+        var platText = dep["platform_number"]
+        if (platText != null) platText = "Platform " + platText;
+        if (platText != undefined) lineWidget.addSpacer()
+
+        addTextWithStyle({
+            stack: lineWidget,
+            text: platText ?? "",
+            color: "#808080",
+            size: 14
+        })
+        widget.addSpacer(2)
+
+        let depWidget = widget.addStack();
+        depWidget.topAlignContent()
 
         var scheduledTime = dep["scheduled_departure_utc"]
         var estimatedTime = dep["estimated_departure_utc"]
@@ -161,15 +199,8 @@ async function createWidget(departures) {
         addTextWithStyle({
             stack: depWidget,
             text: depText,
-            color: "#000000"
-        })
-        depWidget.addSpacer(15)
-
-        let isExpress = dep.run["express_stop_count"]
-        addTextWithStyle({
-            stack: depWidget,
-            text: isExpress > 0 ? "EXPRESS" : "",
-            color: "#88BC41",
+            color: "#000000",
+            size: 18
         })
 
         depWidget.addSpacer()
@@ -178,8 +209,7 @@ async function createWidget(departures) {
         let dif = new Date(estimatedTime ?? scheduledTime).getTime() - new Date().getTime();
         let time = Math.round(dif / 60000)
         let min = time == 1 ? " min" : " mins"
-        minText = time + min
-        if (time < 50) minText = time + min
+        if (time < 120) minText = time + min
         if (time === 0) minText = "Now"
         if (estimatedTime === null) minText = ""
         if (new Date().toDateString() != localTime.toDateString()) {
@@ -191,18 +221,18 @@ async function createWidget(departures) {
         addTextWithStyle({
             stack: depWidget,
             text: minText,
-            color: "#88BC41"
+            color: "#88BC41",
         })
 
-        if (estimatedTime != null)
+        if (estimatedTime != null && time < 120)
             addSymbol({
                 symbol: "dot.radiowaves.up.forward",
                 stack: depWidget,
-                size: 8,
+                size: 12,
                 color: "#88BC41"
             })
 
-        widget.addSpacer(5)
+        widget.addSpacer()
     }
 
     return widget
