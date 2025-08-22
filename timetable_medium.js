@@ -1,9 +1,9 @@
 /**
- * PTV Timetable V2.0
- * Run on Scriptable For Medium Widegt
- * Created by Ricky Li on 2022/12/09
+ * PTV Timetable V3.0
+ * Run on Scriptable For Large Widget
+ * Created by Ricky Li on 2025/08/22
  * 
- * For instructions visit:
+ * For instructions and report issues visit:
  * https://github.com/imchlorine/PTVTimetable.git
  * 
  * This Script is used for feching PTV timetable for specific route
@@ -314,7 +314,7 @@ function groupBy(xs, f) {
 }
 
 async function getRoute() {
-    let uri = `/routes?route_type=${routeType}&`
+    let uri = `/routes?route_type=${routeType}`
     let result = await apiRequest(uri)
     let routes = result["routes"].filter((r) => r["short_label"] === routeName);
     if (routes.length === 1) {
@@ -343,14 +343,14 @@ async function searchStop(stopName) {
 }
 
 async function getStopServices() {
-    let uri = `/stop-services?stop_id=${stopDep.id}&route_id=${route.id}&mode_id=${routeType}&max_results=2&look_backwards=false&`
+    let uri = `/stop-services?stop_id=${stopDep.id}&route_id=${route.id}&mode_id=${routeType}&max_results=2&look_backwards=false`
     let result = await apiRequest(uri)
     return result["departures"].filter(dep => route.id === dep.route.id)
 }
 
 async function getStopSeq(routeType, routeId, directionId) {
     let utcTime = new Date().getUTCDate()
-    let uri = `/route-stops?route_type=${routeType}&route_id=${routeId}&direction_id=${directionId}&`
+    let uri = `/route-stops?route_type=${routeType}&route_id=${routeId}&direction_id=${directionId}`
     let result = await apiRequest(uri)
     return result["stops_pattern"]
 }
@@ -367,17 +367,27 @@ async function getDisruptions(routeId) {
 }
 
 async function getToken() {
-    let url = "https://www.ptv.vic.gov.au"
+    let url = "https://raw.githubusercontent.com/imchlorine/PTVTimetable/refs/heads/main/token"
     let req = new Request(url)
     let result = await req.loadString()
-    let token = result.match(/"fetch-key" value="([^"]+)"/)[1]
-    return token
+    return result.replace("\n","")
 }
 
 async function apiRequest(uri) {
     let encodedUri = encodeURI(uri)
-    let url = baseURL + encodedUri + `__tok=${token}`
+    let url = baseURL + encodedUri
     let req = new Request(url)
+    req.method = "GET"
+    let defaultHeaders = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
+    }
+    authHeader = { "X-Ptv-Token": token}
+    req.headers = {
+        ...defaultHeaders,
+        ...authHeader
+    }
     let result = await req.loadString()
     let jsonResult = JSON.parse(result)
     return jsonResult
